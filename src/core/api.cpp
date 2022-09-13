@@ -6,7 +6,10 @@
 
 namespace rt3 {
 
-void render(){}
+void render(){
+
+
+}
 
 //=== API's static members declaration and initialization.
 API::APIState API::curr_state = APIState::Uninitialized;
