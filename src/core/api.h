@@ -8,50 +8,48 @@
 //=== API Macro definitions
 
 /// Check whether the current state has been intialized.
-#define VERIFY_INITIALIZED(func_name)                                        \
-  if (curr_state == APIState::Uninitialized) {                               \
-    RT3_ERROR(std::string{"API::init() must be called before "} +            \
-              std::string{func_name} + std::string{"(). Ignoring."});        \
-    return;                                                                  \
-  } else /* Empty so that it receives the semicolon palace after this macro. \
-          */
+#define VERIFY_INITIALIZED(func_name) \
+ if (curr_state == APIState::Uninitialized) { \
+  RT3_ERROR(std::string{ "API::init() must be called before " } + std::string{ func_name } \
+            + std::string{ "(). Ignoring." }); \
+  return; \
+ } else /* Empty so that it receives the semicolon palace after this macro. \
+         */
 
 /// Check whether the current state corresponds to setup section.
-#define VERIFY_SETUP_BLOCK(func_name)                                        \
-  VERIFY_INITIALIZED(func_name)                                              \
-  if (curr_state == APIState::WorldBlock) {                                  \
-    RT3_ERROR(std::string{"Rendering setup cannot happen inside "} +         \
-              std::string{"World definition block; "} +                      \
-              std::string{func_name} +                                       \
-              std::string{"() not allowed. Ignoring"});                      \
-    return;                                                                  \
-  } else /* Empty so that it receives the semicolon palace after this macro. \
-          */
+#define VERIFY_SETUP_BLOCK(func_name) \
+ VERIFY_INITIALIZED(func_name) \
+ if (curr_state == APIState::WorldBlock) { \
+  RT3_ERROR(std::string{ "Rendering setup cannot happen inside " } \
+            + std::string{ "World definition block; " } + std::string{ func_name } \
+            + std::string{ "() not allowed. Ignoring" }); \
+  return; \
+ } else /* Empty so that it receives the semicolon palace after this macro. \
+         */
 
 /// Check whether the current state corresponds to the world section.
-#define VERIFY_WORLD_BLOCK(func_name)                                        \
-  VERIFY_INITIALIZED(func_name)                                              \
-  if (curr_state == APIState::SetupBlock) {                                  \
-    RT3_ERROR(std::string{"Scene description must happen inside "} +         \
-              std::string{"World Definition block; "} +                      \
-              std::string{func_name} +                                       \
-              std::string{"() not allowed. Ignoring"});                      \
-    return;                                                                  \
-  } else /* Empty so that it receives the semicolon palace after this macro. \
-          */
+#define VERIFY_WORLD_BLOCK(func_name) \
+ VERIFY_INITIALIZED(func_name) \
+ if (curr_state == APIState::SetupBlock) { \
+  RT3_ERROR(std::string{ "Scene description must happen inside " } \
+            + std::string{ "World Definition block; " } + std::string{ func_name } \
+            + std::string{ "() not allowed. Ignoring" }); \
+  return; \
+ } else /* Empty so that it receives the semicolon palace after this macro. \
+         */
 
 namespace rt3 {
 /// Collection of objects and diretives that control rendering, such as camera,
 /// lights, prims.
 struct RenderOptions {
   // the Film
-  std::string film_type{"image"};  // The only type available.
+  std::string film_type{ "image" };  // The only type available.
   ParamSet film_ps;
   /// the Camera
-  string camera_type{"perspective"};
+  string camera_type{ "perspective" };
   ParamSet camera_ps;
   /// the Bakcground
-  string bkg_type{"solid"};  // "image", "interpolated"
+  string bkg_type{ "solid" };  // "image", "interpolated"
   ParamSet bkg_ps;
 };
 
@@ -97,6 +95,8 @@ class API {
   // === Helper functions.
   ///
   static Film* make_film(const string& name, const ParamSet& ps);
+  static Background* make_background(const string& name, const ParamSet& ps);
+  static Camera* make_camera(const string& name, const ParamSet& ps);
 
  public:
   //=== API function begins here.

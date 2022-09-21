@@ -8,14 +8,15 @@
 #include <memory>
 #include <vector>
 using std::vector;
-#include <stack>
 #include <map>
-#include <unordered_map>
+#include <stack>
 #include <string>
+
+#include <unordered_map>
 using std::string;
 #include <algorithm>
-#include <utility>
 #include <tuple>
+#include <utility>
 using std::tuple;
 #include <array>
 using std::array;
@@ -47,9 +48,11 @@ using Point2i = std::array<int, 2>;
 using Point2f = std::array<float, 2>;
 
 template <typename T, size_t S>
-std::ostream& operator<<(std::ostream& os, const std::array<T, S>& v) {
+std::ostream& operator<<(std::ostream& os, const std::array<T, S>& v)
+{
   os << "[ ";
-  for (const auto& e : v) os << e << " ";
+  for (const auto& e : v)
+    os << e << " ";
   os << "]";
   return os;
 }
@@ -58,6 +61,7 @@ std::ostream& operator<<(std::ostream& os, const std::array<T, S>& v) {
 class Film;
 class Background;
 class BackgroundColor;
+class Camera;
 
 //=== aliases
 typedef float real_type;
@@ -66,7 +70,8 @@ typedef std::tuple<bool, std::string> result_type;
 
 /// This struct holds information provided via command line arguments
 struct RunningOptions {
-  RunningOptions() : filename{""}, outfile{""}, quick_render{false} {
+  RunningOptions() : filename{ "" }, outfile{ "" }, quick_render{ false }
+  {
     crop_window[0][0] = 0;  //!< x0
     crop_window[0][1] = 1;  //!< x1,
     crop_window[1][0] = 0;  //!< y0
@@ -78,10 +83,9 @@ struct RunningOptions {
                                 //!< resolition.
   std::string filename;         //!< input scene file name.
   std::string outfile;          //!< output image file name.
-  bool quick_render;  //!< when set, render image with 1/4 of the requested
-                      //!< resolition.
+  bool quick_render;            //!< when set, render image with 1/4 of the requested
+                                //!< resolition.
 };
-
 
 //=== Global Inline Functions
 
@@ -92,13 +96,14 @@ struct RunningOptions {
  * \return The interpolated value.
  */
 //
-inline float Lerp(float t, float v1, float v2) {
+inline float Lerp(float t, float v1, float v2)
+{
   return (1.f - t) * v1 + t * v2;
 }
 
 /// Clamp T to [low,high].
-template <typename T, typename U, typename V>
-inline T Clamp(T val, U low, V high) {
+template <typename T, typename U, typename V> inline T Clamp(T val, U low, V high)
+{
   if (val < low)
     return low;
   else if (val > high)
@@ -108,10 +113,16 @@ inline T Clamp(T val, U low, V high) {
 }
 
 /// Degrees to radians.
-inline float Radians(float deg) { return ((float)M_PI / 180.f) * deg; }
+inline float Radians(float deg)
+{
+  return ((float)M_PI / 180.f) * deg;
+}
 
 /// Radians to degreees.
-inline float Degrees(float rad) { return (180.f / (float)M_PI) * rad; }
+inline float Degrees(float rad)
+{
+  return (180.f / (float)M_PI) * rad;
+}
 }  // namespace rt3
 
 #endif  // RT3_H

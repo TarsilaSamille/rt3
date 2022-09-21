@@ -9,32 +9,46 @@
 /// Pure virtual basic type. The map stores a pointer to the base class
 class ValueBase {
  public:
-  ValueBase() {}
-  virtual ~ValueBase() {}
+  ValueBase()
+  {
+  }
+  virtual ~ValueBase()
+  {
+  }
 };
 
 /// We must convert the base class object to the proper derived class object.
-template <typename T>
-class Value : public ValueBase {
+template <typename T> class Value : public ValueBase {
  private:
   T m_value;  // The stored data.
 
  public:
   /// Ctr. always requires an argument.
-  Value(T value) : m_value{value} {}
-  ~Value() {}
+  Value(T value) : m_value{ value }
+  {
+  }
+  ~Value()
+  {
+  }
 
   /// Copy ctr.
-  Value(const Value& src) : m_value{src.m_value} {}
+  Value(const Value& src) : m_value{ src.m_value }
+  {
+  }
 
   /// Assignemt operator
-  Value& operator=(const Value& src) {
-    if (this != &src) m_value = src.m_value;
+  Value& operator=(const Value& src)
+  {
+    if (this != &src)
+      m_value = src.m_value;
     return *this;
   }
 
   /// Retrieve value.
-  T value() { return m_value; }
+  T value()
+  {
+    return m_value;
+  }
 };
 
 namespace rt3 {
@@ -55,8 +69,8 @@ using ParamSet = std::map<std::string, std::shared_ptr<ValueBase>>;
  * @return The value associated with `key`, if such key is stored in the `ps`,
  * or the given default value otherwise.
  */
-template <typename T>
-T retrieve(const ParamSet& ps, std::string key, const T& default_value = T{}) {
+template <typename T> T retrieve(const ParamSet& ps, std::string key, const T& default_value = T{})
+{
   // Try to retrieve key/data item from the map.
   auto result = ps.find(key);
   if (result != ps.end()) {
@@ -68,7 +82,7 @@ T retrieve(const ParamSet& ps, std::string key, const T& default_value = T{}) {
     Value<T>* rval4 = (Value<T>*)(sptr.get()); */
 
     std::cout << "--> ParamSet: Found [\"" << key << "\"] with value = ";
-    std::cout << rval           << ".\n";
+    // std::cout << rval << ".\n";
     /* std::cout << rval2.value()  << ".\n";
     std::cout << rval3->value() << ".\n";
     std::cout << rval4->value() << ".\n"; */

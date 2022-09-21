@@ -29,7 +29,7 @@ Film *API::make_film(const std::string &type, const ParamSet &ps) {
   return film;
 }
 
-Background *make_background(const std::string &type, const ParamSet &ps) {
+Background* API::make_background(const std::string &type, const ParamSet &ps) {
   std::cout << ">>> Inside API::background()\n";
   Background *bkg{nullptr};
   bkg = create_color_background(ps);
