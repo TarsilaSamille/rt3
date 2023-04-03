@@ -3,7 +3,8 @@
 
 #include <string>
 
-#include "rt3-base.h"
+#include "rt3.h"
+#include "paramset.h"
 
 //=== API Macro definitions
 
@@ -12,9 +13,7 @@
  if (curr_state == APIState::Uninitialized) { \
   RT3_ERROR(std::string{ "API::init() must be called before " } + std::string{ func_name } \
             + std::string{ "(). Ignoring." }); \
-  return; \
- } else /* Empty so that it receives the semicolon palace after this macro. \
-         */
+ }
 
 /// Check whether the current state corresponds to setup section.
 #define VERIFY_SETUP_BLOCK(func_name) \
@@ -23,9 +22,7 @@
   RT3_ERROR(std::string{ "Rendering setup cannot happen inside " } \
             + std::string{ "World definition block; " } + std::string{ func_name } \
             + std::string{ "() not allowed. Ignoring" }); \
-  return; \
- } else /* Empty so that it receives the semicolon palace after this macro. \
-         */
+ }
 
 /// Check whether the current state corresponds to the world section.
 #define VERIFY_WORLD_BLOCK(func_name) \
@@ -34,9 +31,7 @@
   RT3_ERROR(std::string{ "Scene description must happen inside " } \
             + std::string{ "World Definition block; " } + std::string{ func_name } \
             + std::string{ "() not allowed. Ignoring" }); \
-  return; \
- } else /* Empty so that it receives the semicolon palace after this macro. \
-         */
+ }
 
 namespace rt3 {
 /// Collection of objects and diretives that control rendering, such as camera,
@@ -90,8 +85,6 @@ class API {
   // reused later [1] Create the integrator. static unique_ptr< Scene >
   // the_scene;
 
-  //== Private methods
- private:
   // === Helper functions.
   ///
   static Film* make_film(const string& name, const ParamSet& ps);
@@ -101,15 +94,15 @@ class API {
  public:
   //=== API function begins here.
   static void init_engine(const RunningOptions&);
-  static void run(void);
-  static void clean_up(void);
-  static void reset_engine(void);
+  static void run();
+  static void clean_up();
+  static void reset_engine();
 
   static void film(const ParamSet& ps);
   static void camera(const ParamSet& ps);
   static void background(const ParamSet& ps);
-  static void world_begin(void);
-  static void world_end(void);
+  static void world_begin();
+  static void world_end();
 };
 }  // namespace rt3
 
