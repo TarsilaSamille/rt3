@@ -58,17 +58,17 @@ namespace rt3 {
 
     /// Extracts a single COMPOSITE element.
     template < typename BASIC, typename COMPOSITE >
-    bool parse_single_COMPOSITE_attrib( tinyxml2::XMLElement *e, rt3::ParamSet *ps, string name );
+    bool parse_single_COMPOSITE_attrib( tinyxml2::XMLElement *p_element, rt3::ParamSet *ps, string att_key );
     /// Extracts an array of COMPOSITE elements.
     template < typename BASIC, typename COMPOSITE , int SIZE=3 >
-    bool parse_array_COMPOSITE_attrib( tinyxml2::XMLElement *e, rt3::ParamSet *ps, string name );
+    bool parse_array_COMPOSITE_attrib( tinyxml2::XMLElement *p_element, rt3::ParamSet *ps, string att_key );
 
     /// Extracts a single BASIC element.
     template < typename T >
-    bool parse_single_BASIC_attrib( tinyxml2::XMLElement *e, rt3::ParamSet *ps , string name );
+    bool parse_single_BASIC_attrib( tinyxml2::XMLElement *p_element, rt3::ParamSet *ps , string att_key );
     /// Extracts an array of BASIC elements.
     template < typename T >
-    bool parse_array_BASIC_attrib( tinyxml2::XMLElement *e, rt3::ParamSet *ps , string name );
+    bool parse_array_BASIC_attrib( tinyxml2::XMLElement *p_element, rt3::ParamSet *ps , string att_key );
 
     // === Enumerations
     /// Type of possible paramter types we may read from the input scene file.
@@ -95,7 +95,7 @@ namespace rt3 {
     // === parsing functions.
     void parse( const char* );
     void parse_tags(  tinyxml2::XMLElement *, int );
-    void parse_parameters( tinyxml2::XMLElement *p_element, const vector<std::pair<param_type_e, string>>param_list, ParamSet *ps_out );
+    void parse_parameters( tinyxml2::XMLElement *p_element, const vector<std::pair<param_type_e, string>> &param_list, ParamSet *ps_out );
 
     //-------------------------------------------------------------------------------
 } // namespace RT3

@@ -8,28 +8,29 @@
 
 /// Pure virtual basic type. The map stores a pointer to the base class
 class ValueBase {
- public:
-  ValueBase() {}
-  virtual ~ValueBase() {}
+public:
+  ValueBase() = default;
+  virtual ~ValueBase() = default;
 };
 
 /// We must convert the base class object to the proper derived class object.
-template <typename T>
-class Value : public ValueBase {
- private:
-  T m_value;  // The stored data.
+template <typename T> class Value : public ValueBase {
+private:
+  T m_value; // The stored data.
 
- public:
+public:
   /// Ctr. always requires an argument.
   Value(T value) : m_value{value} {}
-  ~Value() {}
+  ~Value() override = default;
 
   /// Copy ctr.
-  Value(const Value& src) : m_value{src.m_value} {}
+  Value(const Value &src) : m_value{src.m_value} {}
 
   /// Assignemt operator
-  Value& operator=(const Value& src) {
-    if (this != &src) m_value = src.m_value;
+  Value &operator=(const Value &src) {
+    if (this != &src) {
+      m_value = src.m_value;
+    }
     return *this;
   }
 
@@ -53,34 +54,34 @@ using ParamSet = std::map<std::string, std::shared_ptr<ValueBase>>;
  * @param default_value The default value returned, in case the key is not in
  * the ParamSet.
  * @return The value associated with `key`, if such key is stored in the `ps`,
- * or the given default value otherwise.
+ * or the provided default value otherwise.
  */
 template <typename T>
-T retrieve(const ParamSet& ps, std::string key, const T& default_value = T{}) {
+T retrieve(const ParamSet &ps, const std::string &key,
+           const T &default_value = T{}) {
   // Try to retrieve key/data item from the map.
   auto result = ps.find(key);
   if (result != ps.end()) {
-    const auto& [key, sptr] = *result;
+    const auto &[key, sptr] = *result;
     // Alternative ways of converting generic pointer into the desired one.
-    auto rval = dynamic_cast<Value<T>&>(*sptr).value();
+    auto rval = dynamic_cast<Value<T> &>(*sptr).value();
     /* auto rval2 = dynamic_cast<Value<T>&>(*sptr);
     auto rval3 = dynamic_cast<Value<T>*>(sptr.get());
     Value<T>* rval4 = (Value<T>*)(sptr.get()); */
 
-    std::cout << "--> ParamSet: Found [\"" << key << "\"] with value = ";
-    std::cout << rval           << ".\n";
+    std::cout << "--> ParamSet: Found [\"" << key << "\"]\n";
+    // std::cout << rval<< ".\n";
     /* std::cout << rval2.value()  << ".\n";
     std::cout << rval3->value() << ".\n";
     std::cout << rval4->value() << ".\n"; */
 
     // Returns the stored value.
     return rval;
-  } else {
-    std::cout << "--> ParamSet: Key [\"" << key << "\"] not present.\n";
-    // Assign a default value in case type is not in the ParamSet object.
-    return default_value;
   }
+  std::cout << "--> ParamSet: Key [\"" << key << "\"] not present.\n";
+  // Assign a default value in case type is not in the ParamSet object.
+  return default_value;
 }
-}  // namespace rt3
+} // namespace rt3
 
 #endif

@@ -6,10 +6,7 @@
 
 namespace rt3 {
 
-void render(){
-
-
-}
+void render() {}
 
 //=== API's static members declaration and initialization.
 API::APIState API::curr_state = APIState::Uninitialized;
@@ -20,7 +17,7 @@ std::unique_ptr<RenderOptions> API::render_opt;
 // THESE FUNCTIONS ARE NEEDED ONLY IN THIS SOURCE FILE (NO HEADER NECESSARY)
 // ˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇˇ
 
-Film *API::make_film(const std::string &type, const ParamSet &ps) {
+Film *API::make_film(const std::string &name , const ParamSet &ps) {
   std::cout << ">>> Inside API::make_film()\n";
   Film *film{nullptr};
   film = create_film(ps);
@@ -29,7 +26,7 @@ Film *API::make_film(const std::string &type, const ParamSet &ps) {
   return film;
 }
 
-Background *make_background(const std::string &type, const ParamSet &ps) {
+Background *API::make_background(const std::string &name, const ParamSet &ps) {
   std::cout << ">>> Inside API::background()\n";
   Background *bkg{nullptr};
   bkg = create_color_background(ps);
@@ -47,8 +44,9 @@ void API::init_engine(const RunningOptions &opt) {
   // Save running option sent from the main().
   curr_run_opt = opt;
   // Check current machine state.
-  if (curr_state != APIState::Uninitialized)
+  if (curr_state != APIState::Uninitialized) {
     RT3_ERROR("API::init_engine() has already been called! ");
+  }
   // Set proper machine state
   curr_state = APIState::SetupBlock;
   // Preprare render infrastructure for a new scene.
@@ -58,30 +56,31 @@ void API::init_engine(const RunningOptions &opt) {
   RT3_MESSAGE("[1] Rendering engine initiated.\n");
 }
 
-void API::clean_up(void) {
+void API::clean_up() {
   // Check for correct machine state
-  if (curr_state == APIState::Uninitialized)
+  if (curr_state == APIState::Uninitialized) {
     RT3_ERROR("API::clean_up() called before engine initialization.");
-  else if (curr_state == APIState::WorldBlock)
+  } else if (curr_state == APIState::WorldBlock) {
     RT3_ERROR("API::clean_up() called inside world definition section.");
+  }
   curr_state = APIState::Uninitialized;
 
   RT3_MESSAGE("[4] Rendering engine clean up concluded. Shutting down...\n");
 }
 
-void API::run(void) {
+void API::run() {
   // Try to load and parse the scene from a file.
   RT3_MESSAGE("[2] Beginning scene file parsing...\n");
   // Recall that the file name comes from the running option struct.
   parse(curr_run_opt.filename.c_str());
 }
 
-void API::world_begin(void) {
-  VERIFY_SETUP_BLOCK("API::world_begin");  // check for correct machine state.
-  curr_state = APIState::WorldBlock;       // correct machine state.
+void API::world_begin() {
+  VERIFY_SETUP_BLOCK("API::world_begin"); // check for correct machine state.
+  curr_state = APIState::WorldBlock;      // correct machine state.
 }
 
-void API::world_end(void) {
+void API::world_end() {
   VERIFY_WORLD_BLOCK("API::world_end");
   // The scene has been properly set up and the scene has
   // already been parsed. It's time to render the scene.
@@ -110,10 +109,10 @@ void API::world_end(void) {
 
     //================================================================================
     auto start = std::chrono::steady_clock::now();
-    render();  // TODO: This is the ray tracer's  main loop.
+    render(); // TODO: This is the ray tracer's  main loop.
     auto end = std::chrono::steady_clock::now();
     //================================================================================
-    auto diff = end - start;  // Store the time difference between start and end
+    auto diff = end - start; // Store the time difference between start and end
     // Seconds
     auto diff_sec = std::chrono::duration_cast<std::chrono::seconds>(diff);
     RT3_MESSAGE("    Time elapsed: " + std::to_string(diff_sec.count()) +
@@ -123,7 +122,7 @@ void API::world_end(void) {
                 " ms) \n");
   }
   // [4] Basic clean up
-  curr_state = APIState::SetupBlock;  // correct machine state.
+  curr_state = APIState::SetupBlock; // correct machine state.
   reset_engine();
 }
 
@@ -131,11 +130,11 @@ void API::world_end(void) {
 /// objects, lights, materials, etc) , maybe with different integrator, and
 /// camera setup. Hard reset on the engine. User needs to setup all entities,
 /// such as camera, integrator, accelerator, etc.
-void API::reset_engine(void) {
+void API::reset_engine() {
   // curr_GS = GraphicsState();
   // This will delete all information on integrator, cameras, filters,
   // acceleration structures, etc., that has been set previously.
-  render_opt.reset(new RenderOptions);
+  render_opt = std::make_unique<RenderOptions>();
 }
 
 void API::background(const ParamSet &ps) {
@@ -159,4 +158,4 @@ void API::film(const ParamSet &ps) {
   render_opt->film_ps = ps;
 }
 
-}  // namespace rt3
+} // namespace rt3

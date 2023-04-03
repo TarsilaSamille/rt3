@@ -14,12 +14,14 @@ class Film {
   enum class image_type_e : int { PNG = 0, PPM3, PPM6 };
 
   //=== Film Public Methods
-  Film(const Point2i &resolution, const std::string &filename,
-       image_type_e imgt);
+  Film(const Point2i &resolution, const std::string &filename, image_type_e imgt);
   virtual ~Film();
 
   /// Retrieve original Film resolution.
-  Point2i get_resolution() const { return m_full_resolution; };
+  Point2i get_resolution() const
+  {
+    return m_full_resolution;
+  };
   /// Takes a sample `p` and its radiance `L` and updates the image.
   void add_sample(const Point2f &, const ColorXYZ &);
   void write_image() const;
@@ -27,7 +29,7 @@ class Film {
   //=== Film Public Data
   const Point2i m_full_resolution;  //!< The image's full resolution values.
   std::string m_filename;           //!< Full path file name + extension.
-  image_type_e m_image_type;          //!< Image type, PNG, PPM3, PPM6.
+  image_type_e m_image_type;        //!< Image type, PNG, PPM3, PPM6.
   // TODO: Create the matrix (or vector) that will hold the image data.
   // std::unique_ptr< ColorBuffer > m_color_buffer_ptr; //!< Reference to the
   // color buffer (image) object.
