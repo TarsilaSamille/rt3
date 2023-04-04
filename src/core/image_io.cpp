@@ -58,6 +58,7 @@ bool save_ppm3(unsigned char *data, size_t w, size_t h, size_t d,
 
 bool save_png(unsigned char *data, size_t w, size_t h, size_t d,
               const std::string &file_name_) {
+  // #define LODEPNG
 #ifdef LODEPNG
   std::cout << "depth = " << d << std::endl;
   std::vector<unsigned char> img;  //( w * h * d );

@@ -71,7 +71,7 @@ namespace rt3 {
     bool parse_array_BASIC_attrib( tinyxml2::XMLElement *p_element, rt3::ParamSet *ps , string att_key );
 
     // === Enumerations
-    /// Type of possible paramter types we may read from the input scene file.
+    /// Type of possible parameter types we may read from the input scene file.
     enum class param_type_e : int { BOOL=0,
         INT,           //!< Single integet
         UINT,          //!< Single unsigned int
